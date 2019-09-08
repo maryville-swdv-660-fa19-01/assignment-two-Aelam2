@@ -32,7 +32,6 @@ class GameApiViewTests( TestCase ):
         self.request_factory = APIRequestFactory()
         self.mock_get_request = self.request_factory.get('dummy')
 
-
     ### POST (create game) view
     def test_game_view_should_create_new_game_on_POST( self ):
         response = game_view( self.request_factory.post('dummy') )
@@ -73,3 +72,20 @@ class GameApiViewTests( TestCase ):
     # HINT: remember the `setUp` fixture that is in this test class, 
     #   it constructs things that might be useful
 
+    def test_game_view_return_game_solution_on_GET_with_valid_ID( self ):
+        self.mock_game.word = 'batman'
+        with patch.object( Game.objects, 'get' ) as mock_get:
+            mock_get.return_value = self.mock_game
+
+            response = game_solution(self.mock_get_request, 1)
+            
+            mock_get.assert_called_with( pk=1 )
+            self.assertEqual(response.status_code, 200)
+            self.assertEqual(response.data['solution'], self.mock_game.word)
+    
+    def test_game_view_respond_with_404_on_invalid_game_ID( self ):
+        with patch.object( Game.objects, 'get' ) as mock_get:
+            mock_get.side_effect = Game.DoesNotExist
+
+            response = game_solution(self.mock_get_request, 2)
+            self.assertEqual(response.status_code, 404)

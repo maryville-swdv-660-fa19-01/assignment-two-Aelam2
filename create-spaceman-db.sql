@@ -1,7 +1,8 @@
 -- User: spaceman_game_user
 -- DROP USER spaceman_game_user;
 
-CREATE USER spaceman_game_user WITH
+CREATE USER spaceman_game_user
+WITH
   LOGIN
   NOSUPERUSER
   INHERIT
@@ -17,9 +18,9 @@ ALTER USER spaceman_game_user with PASSWORD 'password';
 CREATE DATABASE spaceman_game
     WITH 
     OWNER = postgres
-    ENCODING = 'UTF8'
-    LC_COLLATE = 'C'
-    LC_CTYPE = 'C'
+ENCODING = 'UTF8'
+    LC_COLLATE = 'English_United States.1252'
+    LC_CTYPE = 'English_United States.1252'
     TABLESPACE = pg_default
     CONNECTION LIMIT = -1;
 

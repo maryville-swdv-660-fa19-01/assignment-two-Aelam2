@@ -155,18 +155,51 @@ class GameModelTests( TestCase ):
         self.assertEquals( game.letters_guessed, expectedLettersGuessed )
 
     ### is_game_over field
-    # TODO: add tests
-    # HINT: considering adding a fixture or other widely scoped variables if you feel ]hat will
-    #  make this easier
-
+    #Incorrect Guess should not end the game if guess are left
     def test_is_game_over_is_false_if_guesses_left( self ):
-        pass
+        game = Game( 
+            word= 'TESTWORD',
+            guessed_word_state= ['','','S','','W','O','R',''],
+            letters_guessed = ['S', 'A', 'W', 'O', 'R','C'],
+            guesses_allowed= 10, 
+            guesses_taken= 5
+        )
+        game.handleGuess('X')
+        self.assertFalse(game.is_game_over)
 
+    #Correct guess should not end the game if there are letters left to guess
     def test_is_game_over_is_false_if_not_all_letters_guessed( self ):
-        pass
+        game = Game( 
+            word= 'TESTWORD',
+            guessed_word_state= ['','','S','','W','O','R',''],
+            letters_guessed = ['S', 'A', 'W', 'O', 'R','C'],
+            guesses_allowed= 10, 
+            guesses_taken= 5
+        )
+        game.handleGuess('T')
+        self.assertFalse(game.is_game_over)
 
+    #Game should end if 9/10 guesses are taken and the next guess is inccorect
     def test_is_game_over_is_true_if_no_guesses_left( self ):
-        pass
+        game = Game( 
+            word= 'TESTWORD',
+            guessed_word_state= ['','','S','','W','O','R',''],
+            letters_guessed = ['S', 'A', 'W', 'O', 'R','C'],
+            guesses_allowed= 10, 
+            guesses_taken= 9
+        )
+        game.handleGuess('X')
+        self.assertTrue(game.is_game_over)
 
+    #Game should end if guessed word matches word
     def test_is_game_over_is_true_if_all_letters_guessed( self ):
-        pass
+        game = Game( 
+            word= 'TESTWORD',
+            guessed_word_state= ['T','','S','T','W','O','R','D'],
+            letters_guessed = ['S', 'A', 'W', 'O', 'R','C', 'T', 'D'],
+            guesses_allowed= 10, 
+            guesses_taken= 9
+        )
+
+        game.handleGuess('E')
+        self.assertTrue(game.is_game_over)
